@@ -136,6 +136,90 @@ function verDetalhes(clienteId) {
     showPage('cliente-detalhes');
 }
 
+// Função para definir data e hora atual
+function definirDataHoraAtual() {
+    const agora = new Date();
+    
+    // Formatar data para input type="date" (YYYY-MM-DD)
+    const dataFormatada = agora.toISOString().split('T')[0];
+    
+    // Formatar hora para input type="time" (HH:MM)
+    const horaFormatada = agora.toTimeString().slice(0, 5);
+    
+    document.getElementById('data-interacao').value = dataFormatada;
+    document.getElementById('horario-interacao').value = horaFormatada;
+}
+
+// Função para mostrar modal de interação
+function showAddInteraction() {
+    const modal = new bootstrap.Modal(document.getElementById('modalInteracao'));
+    
+    // Limpar formulário
+    document.getElementById('form-interacao').reset();
+    document.getElementById('km-percorrida').value = '0';
+    document.getElementById('km-percorrida').setAttribute('readonly', true);
+    
+    // Definir data e hora atual como padrão
+    definirDataHoraAtual();
+    
+    modal.show();
+}
+
+// Função para salvar interação
+function salvarInteracao() {
+    const tipo = document.getElementById('tipo-interacao').value;
+    const descricao = document.getElementById('descricao-interacao').value;
+    const kmPercorrida = parseFloat(document.getElementById('km-percorrida').value) || 0;
+    const dataInteracao = document.getElementById('data-interacao').value;
+    const horarioInteracao = document.getElementById('horario-interacao').value;
+    
+    // Validações
+    if (!tipo) {
+        showAlert('Selecione o tipo de interação!', 'danger');
+        return;
+    }
+    
+    if (!dataInteracao) {
+        showAlert('Informe a data da interação!', 'danger');
+        return;
+    }
+    
+    if (!horarioInteracao) {
+        showAlert('Informe o horário da interação!', 'danger');
+        return;
+    }
+    
+    // Combinar data e hora em um objeto Date
+    const dataHoraCompleta = new Date(`${dataInteracao}T${horarioInteracao}`);
+    
+    // Verificar se a data não é futura
+    const agora = new Date();
+    if (dataHoraCompleta > agora) {
+        const confirmacao = confirm('A data/hora informada é futura. Deseja continuar mesmo assim?');
+        if (!confirmacao) {
+            return;
+        }
+    }
+    
+    const interacao = {
+        id: Date.now(),
+        clienteId: clienteAtual.id,
+        tipo: tipo,
+        descricao: descricao,
+        kmPercorrida: kmPercorrida,
+        dataInteracao: dataHoraCompleta.toISOString()
+    };
+    
+    interacoes.push(interacao);
+    localStorage.setItem('interacoes', JSON.stringify(interacoes));
+    
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalInteracao'));
+    modal.hide();
+    
+    showAlert('Interação adicionada com sucesso!');
+    carregarInteracoes(clienteAtual.id);
+}
+
 // Gerenciamento de Interações
 function carregarInteracoes(clienteId) {
     const interacoesCliente = interacoes.filter(i => i.clienteId === clienteId);
@@ -150,28 +234,34 @@ function carregarInteracoes(clienteId) {
         return;
     }
     
+    // Ordenar por data (mais recente primeiro)
+    interacoesCliente.sort((a, b) => new Date(b.dataInteracao) - new Date(a.dataInteracao));
+    
     container.innerHTML = `
         <div class="table-responsive">
-            <table class="table table-sm">
+            <table class="table table-sm table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th>Tipo</th>
                         <th>Descrição</th>
                         <th>KM</th>
                         <th>Data</th>
+                        <th>Horário</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${interacoesCliente.map(interacao => `
-                        <tr>
-                            <td>
-                                ${getTipoBadge(interacao.tipo)}
-                            </td>
-                            <td>${interacao.descricao || '-'}</td>
-                            <td>${interacao.kmPercorrida > 0 ? interacao.kmPercorrida : '-'}</td>
-                            <td>${new Date(interacao.dataInteracao).toLocaleDateString('pt-BR')} ${new Date(interacao.dataInteracao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</td>
-                        </tr>
-                    `).join('')}
+                    ${interacoesCliente.map(interacao => {
+                        const dataInteracao = new Date(interacao.dataInteracao);
+                        return `
+                            <tr>
+                                <td>${getTipoBadge(interacao.tipo)}</td>
+                                <td>${interacao.descricao || '<em class="text-muted">Sem descrição</em>'}</td>
+                                <td>${interacao.kmPercorrida > 0 ? interacao.kmPercorrida + ' km' : '-'}</td>
+                                <td>${dataInteracao.toLocaleDateString('pt-BR')}</td>
+                                <td>${dataInteracao.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</td>
+                            </tr>
+                        `;
+                    }).join('')}
                 </tbody>
             </table>
         </div>
@@ -185,43 +275,6 @@ function getTipoBadge(tipo) {
         'visita': '<span class="badge bg-warning">Visita</span>'
     };
     return badges[tipo] || tipo;
-}
-
-function showAddInteraction() {
-    const modal = new bootstrap.Modal(document.getElementById('modalInteracao'));
-    document.getElementById('form-interacao').reset();
-    document.getElementById('km-percorrida').value = '0';
-    document.getElementById('km-percorrida').setAttribute('readonly', true);
-    modal.show();
-}
-
-function salvarInteracao() {
-    const tipo = document.getElementById('tipo-interacao').value;
-    const descricao = document.getElementById('descricao-interacao').value;
-    const kmPercorrida = parseFloat(document.getElementById('km-percorrida').value) || 0;
-    
-    if (!tipo) {
-        showAlert('Selecione o tipo de interação!', 'danger');
-        return;
-    }
-    
-    const interacao = {
-        id: Date.now(),
-        clienteId: clienteAtual.id,
-        tipo: tipo,
-        descricao: descricao,
-        kmPercorrida: kmPercorrida,
-        dataInteracao: new Date().toISOString()
-    };
-    
-    interacoes.push(interacao);
-    localStorage.setItem('interacoes', JSON.stringify(interacoes));
-    
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalInteracao'));
-    modal.hide();
-    
-    showAlert('Interação adicionada com sucesso!');
-    carregarInteracoes(clienteAtual.id);
 }
 
 // Relatórios e Exportação
@@ -256,7 +309,8 @@ function exportarExcel() {
                 'Tipo Interação': '',
                 'Descrição': '',
                 'KM Percorrida': '',
-                'Data Interação': ''
+                'Data Interação': '',
+                'Horário Interação': ''
             });
         } else {
             interacoesCliente.forEach(interacao => {
@@ -273,7 +327,8 @@ function exportarExcel() {
                     'Tipo Interação': interacao.tipo,
                     'Descrição': interacao.descricao || '',
                     'KM Percorrida': interacao.kmPercorrida || 0,
-                    'Data Interação': dataInteracao.toLocaleDateString('pt-BR') + ' ' + dataInteracao.toLocaleTimeString('pt-BR')
+                    'Data Interação': dataInteracao.toLocaleDateString('pt-BR'),
+                    'Horário Interação': dataInteracao.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})
                 });
             });
         }
@@ -338,7 +393,7 @@ function carregarDadosDemo() {
                 tipo: 'ligacao',
                 descricao: 'Primeira ligação para apresentação',
                 kmPercorrida: 0,
-                dataInteracao: new Date('2024-01-16').toISOString()
+                dataInteracao: new Date('2024-01-16T10:30:00').toISOString()
             },
             {
                 id: 2,
@@ -346,7 +401,7 @@ function carregarDadosDemo() {
                 tipo: 'visita',
                 descricao: 'Visita técnica no escritório',
                 kmPercorrida: 25.5,
-                dataInteracao: new Date('2024-01-20').toISOString()
+                dataInteracao: new Date('2024-01-20T14:15:00').toISOString()
             }
         ];
         

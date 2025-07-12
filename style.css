@@ -99,6 +99,17 @@ body {
     background: linear-gradient(135deg, #6c757d, #545b62);
 }
 
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+
 /* Formulários */
 .form-control, .form-select {
     border-radius: 8px;
@@ -119,6 +130,22 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* Estilos para campos de data e hora */
+input[type="date"], input[type="time"] {
+    background-color: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+input[type="date"]:focus, input[type="time"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
 /* Tabelas */
 .table {
     border-radius: 10px;
@@ -137,6 +164,14 @@ body {
 
 .table-dark {
     background: linear-gradient(135deg, #343a40, #23272b);
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table td em {
+    font-size: 0.9rem;
 }
 
 /* Badges */
@@ -202,6 +237,19 @@ body {
     font-weight: 600;
 }
 
+.modal-lg {
+    max-width: 600px;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Estilos para texto de ajuda */
+.text-muted {
+    font-size: 0.85rem;
+}
+
 /* Animações */
 @keyframes fadeIn {
     from {
@@ -244,6 +292,18 @@ body {
     .d-md-flex {
         flex-direction: column;
         gap: 10px;
+    }
+    
+    .modal-dialog {
+        margin: 1rem 0.5rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .row .col-md-6 {
+        margin-bottom: 1rem;
     }
 }
 

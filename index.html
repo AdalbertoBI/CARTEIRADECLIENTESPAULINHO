@@ -196,7 +196,7 @@
 
     <!-- Modal Nova Interação -->
     <div class="modal fade" id="modalInteracao" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Nova Interação</h5>
@@ -204,28 +204,58 @@
                 </div>
                 <div class="modal-body">
                     <form id="form-interacao">
-                        <div class="mb-3">
-                            <label for="tipo-interacao" class="form-label">Tipo de Interação *</label>
-                            <select class="form-select" id="tipo-interacao" required>
-                                <option value="">Selecione...</option>
-                                <option value="ligacao">Ligação</option>
-                                <option value="whatsapp">WhatsApp</option>
-                                <option value="visita">Visita Física</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tipo-interacao" class="form-label">Tipo de Interação *</label>
+                                    <select class="form-select" id="tipo-interacao" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="ligacao">Ligação</option>
+                                        <option value="whatsapp">WhatsApp</option>
+                                        <option value="visita">Visita Física</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="km-percorrida" class="form-label">KM Percorrida (apenas para visitas)</label>
+                                    <input type="number" class="form-control" id="km-percorrida" min="0" step="0.1" value="0">
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="descricao-interacao" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="descricao-interacao" rows="3"></textarea>
+                            <textarea class="form-control" id="descricao-interacao" rows="3" placeholder="Descreva a interação..."></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="km-percorrida" class="form-label">KM Percorrida (apenas para visitas)</label>
-                            <input type="number" class="form-control" id="km-percorrida" min="0" step="0.1" value="0">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="data-interacao" class="form-label">Data da Interação *</label>
+                                    <input type="date" class="form-control" id="data-interacao" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="horario-interacao" class="form-label">Horário da Interação *</label>
+                                    <input type="time" class="form-control" id="horario-interacao" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="definirDataHoraAtual()">
+                                <i class="fas fa-clock"></i> Usar Data/Hora Atual
+                            </button>
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> Data e hora podem ser editadas conforme necessário
+                            </small>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="salvarInteracao()">Salvar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarInteracao()">
+                        <i class="fas fa-save"></i> Salvar Interação
+                    </button>
                 </div>
             </div>
         </div>
