@@ -3,193 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestão de Clientes</title>
+    <title>Gestão de Clientes - Sistema Completo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="#" onclick="showPage('home')">
-                <i class="fas fa-users"></i> Gestão de Clientes
-            </a>
+            <a class="navbar-brand" href="#"><i class="fas fa-users"></i> Gestão de Clientes</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="#" onclick="showPage('home')">
-                    <i class="fas fa-home"></i> Início
-                </a>
-                <a class="nav-link" href="#" onclick="showPage('novo-cliente')">
-                    <i class="fas fa-user-plus"></i> Novo Cliente
-                </a>
-                <a class="nav-link" href="#" onclick="showPage('relatorios')">
-                    <i class="fas fa-chart-bar"></i> Relatórios
-                </a>
+                <a class="nav-link" href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Início</a>
+                <a class="nav-link" href="#" onclick="showPage('novo-cliente')"><i class="fas fa-user-plus"></i> Novo Cliente</a>
+                <a class="nav-link" href="#" onclick="showPage('relatorios')"><i class="fas fa-chart-bar"></i> Relatórios</a>
+                <a class="nav-link" href="#" onclick="exportarPlanilhaMensal()"><i class="fas fa-file-excel"></i> Exportar Mensal</a>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <!-- Alertas -->
-        <div id="alert-container"></div>
+    <!-- Alertas -->
+    <div id="alert-container" class="container mt-3"></div>
 
-        <!-- Página Home -->
-        <div id="page-home" class="page">
-            <div class="card">
-                <div class="card-header">
-                    <h4><i class="fas fa-users"></i> Lista de Clientes</h4>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <button class="btn btn-primary" onclick="showPage('novo-cliente')">
-                            <i class="fas fa-plus"></i> Adicionar Cliente
-                        </button>
-                        <button class="btn btn-success" onclick="showPage('relatorios')">
-                            <i class="fas fa-file-excel"></i> Exportar Excel
-                        </button>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Telefone</th>
-                                    <th>Cidade</th>
-                                    <th>Data Cadastro</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clientes-table">
-                                <!-- Preenchido via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Página Novo Cliente -->
-        <div id="page-novo-cliente" class="page" style="display: none;">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-user-plus"></i> Adicionar Novo Cliente</h4>
-                        </div>
-                        <div class="card-body">
-                            <form id="form-cliente">
-                                <div class="mb-3">
-                                    <label for="nome" class="form-label">Nome *</label>
-                                    <input type="text" class="form-control" id="nome" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="telefone" class="form-label">Telefone *</label>
-                                    <input type="tel" class="form-control" id="telefone" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="cidade" class="form-label">Cidade *</label>
-                                    <input type="text" class="form-control" id="cidade" required>
-                                </div>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-secondary" onclick="showPage('home')">
-                                        <i class="fas fa-arrow-left"></i> Cancelar
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Salvar Cliente
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Página Detalhes do Cliente -->
-        <div id="page-cliente-detalhes" class="page" style="display: none;">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4><i class="fas fa-user"></i> Informações do Cliente</h4>
-                            <button class="btn btn-sm btn-danger" onclick="excluirCliente()" title="Excluir Cliente">
-                                <i class="fas fa-trash"></i>
+    <!-- Página Inicial -->
+    <div id="page-home" class="page container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4><i class="fas fa-list"></i> Lista de Clientes</h4>
+                        <div>
+                            <button class="btn btn-success" onclick="showPage('novo-cliente')">
+                                <i class="fas fa-plus"></i> Adicionar Cliente
+                            </button>
+                            <button class="btn btn-info" onclick="exportarExcel()">
+                                <i class="fas fa-file-excel"></i> Exportar Excel
                             </button>
                         </div>
-                        <div class="card-body" id="cliente-info">
-                            <!-- Preenchido via JavaScript -->
-                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-comments"></i> Interações</h4>
-                        </div>
-                        <div class="card-body">
-                            <button class="btn btn-primary mb-3" onclick="showAddInteraction()">
-                                <i class="fas fa-plus"></i> Nova Interação
-                            </button>
-                            <div id="interacoes-list">
-                                <!-- Preenchido via JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-3">
-                <button class="btn btn-secondary" onclick="showPage('home')">
-                    <i class="fas fa-arrow-left"></i> Voltar à Lista
-                </button>
-            </div>
-        </div>
-
-        <!-- Página Relatórios -->
-        <div id="page-relatorios" class="page" style="display: none;">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-chart-bar"></i> Exportar Relatórios</h4>
-                        </div>
-                        <div class="card-body">
-                            <form id="form-relatorio">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="filtro-nome" class="form-label">Filtrar por Nome</label>
-                                            <input type="text" class="form-control" id="filtro-nome" placeholder="Digite o nome do cliente">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="filtro-cidade" class="form-label">Filtrar por Cidade</label>
-                                            <select class="form-select" id="filtro-cidade">
-                                                <option value="">Todas as cidades</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="data-inicio" class="form-label">Data Início</label>
-                                            <input type="date" class="form-control" id="data-inicio">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="data-fim" class="form-label">Data Fim</label>
-                                            <input type="date" class="form-control" id="data-fim">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-success" onclick="exportarExcel()">
-                                        <i class="fas fa-file-excel"></i> Exportar Excel
-                                    </button>
-                                </div>
-                            </form>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Telefone</th>
+                                        <th>Email</th>
+                                        <th>Cidade</th>
+                                        <th>Tipo</th>
+                                        <th>Segmento</th>
+                                        <th>Data Cadastro</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-clientes">
+                                    <!-- Clientes serão carregados aqui -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -197,94 +67,416 @@
         </div>
     </div>
 
-    <!-- Modal Nova Interação -->
-    <div class="modal fade" id="modalInteracao" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Nova Interação</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- Página Novo Cliente -->
+    <div id="page-novo-cliente" class="page container mt-4" style="display: none;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-user-plus"></i> Adicionar Novo Cliente</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="form-cliente">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="nome" class="form-label">Nome *</label>
+                                        <input type="text" class="form-control" id="nome" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="telefone" class="form-label">Telefone *</label>
+                                        <input type="tel" class="form-control" id="telefone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="documento" class="form-label">CPF/CNPJ</label>
+                                        <input type="text" class="form-control" id="documento">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="cidade" class="form-label">Cidade *</label>
+                                        <input type="text" class="form-control" id="cidade" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="estado" class="form-label">Estado</label>
+                                        <select class="form-select" id="estado">
+                                            <option value="">Selecione...</option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                            <option value="TO">Tocantins</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="regiao" class="form-label">Região</label>
+                                        <select class="form-select" id="regiao">
+                                            <option value="">Selecione...</option>
+                                            <option value="Norte">Norte</option>
+                                            <option value="Nordeste">Nordeste</option>
+                                            <option value="Centro-Oeste">Centro-Oeste</option>
+                                            <option value="Sudeste">Sudeste</option>
+                                            <option value="Sul">Sul</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="tipo-cliente" class="form-label">Tipo de Cliente</label>
+                                        <select class="form-select" id="tipo-cliente">
+                                            <option value="Lead">Lead</option>
+                                            <option value="Prospect">Prospect</option>
+                                            <option value="Parceiro">Parceiro</option>
+                                            <option value="Cliente">Cliente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="segmento" class="form-label">Segmento</label>
+                                        <input type="text" class="form-control" id="segmento" placeholder="Ex: Tecnologia, Varejo, Serviços">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="origem-lead" class="form-label">Origem do Lead</label>
+                                        <select class="form-select" id="origem-lead">
+                                            <option value="">Selecione...</option>
+                                            <option value="Site">Site</option>
+                                            <option value="Redes Sociais">Redes Sociais</option>
+                                            <option value="Indicação">Indicação</option>
+                                            <option value="Evento">Evento</option>
+                                            <option value="Telemarketing">Telemarketing</option>
+                                            <option value="Email Marketing">Email Marketing</option>
+                                            <option value="Outros">Outros</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="potencial-compra" class="form-label">Potencial de Compra</label>
+                                        <select class="form-select" id="potencial-compra">
+                                            <option value="Baixo">Baixo</option>
+                                            <option value="Médio">Médio</option>
+                                            <option value="Alto">Alto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="observacoes" class="form-label">Observações</label>
+                                        <textarea class="form-control" id="observacoes" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" onclick="showPage('home')">
+                                    <i class="fas fa-arrow-left"></i> Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Salvar Cliente
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="form-interacao">
+            </div>
+        </div>
+    </div>
+
+    <!-- Página Detalhes do Cliente -->
+    <div id="page-cliente-detalhes" class="page container mt-4" style="display: none;">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-user"></i> Informações do Cliente</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="info-cliente">
+                            <!-- Informações do cliente serão carregadas aqui -->
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary btn-sm" onclick="showPage('nova-interacao')">
+                                <i class="fas fa-plus"></i> Nova Interação
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-comments"></i> Histórico de Interações</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="lista-interacoes">
+                            <!-- Interações serão carregadas aqui -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button class="btn btn-secondary" onclick="showPage('home')">
+                <i class="fas fa-arrow-left"></i> Voltar à Lista
+            </button>
+        </div>
+    </div>
+
+    <!-- Página Nova Interação -->
+    <div id="page-nova-interacao" class="page container mt-4" style="display: none;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-comment-dots"></i> Nova Interação</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="form-interacao">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="tipo-interacao" class="form-label">Tipo de Interação *</label>
+                                        <select class="form-select" id="tipo-interacao" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="ligacao">Ligação</option>
+                                            <option value="whatsapp">WhatsApp</option>
+                                            <option value="visita">Visita Física</option>
+                                            <option value="video">Reunião por Vídeo</option>
+                                            <option value="evento">Evento</option>
+                                            <option value="email">Email</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="status-interacao" class="form-label">Status da Interação</label>
+                                        <select class="form-select" id="status-interacao">
+                                            <option value="Sucesso">Sucesso</option>
+                                            <option value="Reagendado">Reagendado</option>
+                                            <option value="Sem Resposta">Sem Resposta</option>
+                                            <option value="Não Interessado">Não Interessado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="km-percorrida" class="form-label">KM Percorrida</label>
+                                        <input type="number" class="form-control" id="km-percorrida" value="0" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="duracao" class="form-label">Duração (minutos)</label>
+                                        <input type="number" class="form-control" id="duracao" placeholder="Ex: 30">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="resultado" class="form-label">Resultado</label>
+                                        <select class="form-select" id="resultado">
+                                            <option value="">Selecione...</option>
+                                            <option value="Proposta Enviada">Proposta Enviada</option>
+                                            <option value="Contrato Assinado">Contrato Assinado</option>
+                                            <option value="Venda Realizada">Venda Realizada</option>
+                                            <option value="Follow-up Agendado">Follow-up Agendado</option>
+                                            <option value="Sem Interesse">Sem Interesse</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descricao" class="form-label">Descrição</label>
+                                <textarea class="form-control" id="descricao" rows="4" placeholder="Descreva os detalhes da interação..."></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="data-interacao" class="form-label">Data da Interação *</label>
+                                        <input type="date" class="form-control" id="data-interacao" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="horario-interacao" class="form-label">Horário da Interação *</label>
+                                        <input type="time" class="form-control" id="horario-interacao" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="usar-data-atual">
+                                    <label class="form-check-label" for="usar-data-atual">
+                                        Usar Data/Hora Atual
+                                    </label>
+                                </div>
+                                <small class="text-muted">Data e hora podem ser editadas conforme necessário</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="proximos-passos" class="form-label">Próximos Passos</label>
+                                <textarea class="form-control" id="proximos-passos" rows="2" placeholder="Descreva os próximos passos..."></textarea>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" onclick="voltarDetalhesCliente()">
+                                    <i class="fas fa-arrow-left"></i> Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Salvar Interação
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página Relatórios -->
+    <div id="page-relatorios" class="page container mt-4" style="display: none;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-chart-bar"></i> Relatórios e Análises</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body text-center">
+                                        <h5 id="total-clientes">0</h5>
+                                        <p>Total de Clientes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <h5 id="total-interacoes">0</h5>
+                                        <p>Total de Interações</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h5 id="total-parceiros">0</h5>
+                                        <p>Parceiros Ativos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <h5 id="total-vendas">0</h5>
+                                        <p>Vendas Realizadas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
+                                <h5>Filtros</h5>
                                 <div class="mb-3">
-                                    <label for="tipo-interacao" class="form-label">Tipo de Interação *</label>
-                                    <select class="form-select" id="tipo-interacao" required>
-                                        <option value="">Selecione...</option>
-                                        <option value="ligacao">Ligação</option>
-                                        <option value="whatsapp">WhatsApp</option>
-                                        <option value="visita">Visita Física</option>
+                                    <label for="filtro-nome" class="form-label">Filtrar por Nome</label>
+                                    <input type="text" class="form-control" id="filtro-nome" placeholder="Digite o nome...">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="filtro-cidade" class="form-label">Filtrar por Cidade</label>
+                                    <select class="form-select" id="filtro-cidade">
+                                        <option value="">Todas as cidades</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <h5>Período</h5>
                                 <div class="mb-3">
-                                    <label for="km-percorrida" class="form-label">KM Percorrida (apenas para visitas)</label>
-                                    <input type="number" class="form-control" id="km-percorrida" min="0" step="0.1" value="0">
+                                    <label for="data-inicio" class="form-label">Data Início</label>
+                                    <input type="date" class="form-control" id="data-inicio">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="data-fim" class="form-label">Data Fim</label>
+                                    <input type="date" class="form-control" id="data-fim">
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="descricao-interacao" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="descricao-interacao" rows="3" placeholder="Descreva a interação..."></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="data-interacao" class="form-label">Data da Interação *</label>
-                                    <input type="date" class="form-control" id="data-interacao" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="horario-interacao" class="form-label">Horário da Interação *</label>
-                                    <input type="time" class="form-control" id="horario-interacao" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="definirDataHoraAtual()">
-                                <i class="fas fa-clock"></i> Usar Data/Hora Atual
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-success" onclick="exportarPlanilhaMensal()">
+                                <i class="fas fa-file-excel"></i> Exportar Planilha Mensal
                             </button>
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle"></i> Data e hora podem ser editadas conforme necessário
-                            </small>
+                            <button class="btn btn-info" onclick="exportarRelatorioCompleto()">
+                                <i class="fas fa-download"></i> Exportar Relatório Completo
+                            </button>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="salvarInteracao()">
-                        <i class="fas fa-save"></i> Salvar Interação
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Confirmação de Exclusão -->
+    <!-- Modal de Confirmação -->
     <div class="modal fade" id="modalConfirmacao" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
-                    </h5>
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="mensagem-confirmacao"></p>
-                    <div class="alert alert-warning">
-                        <i class="fas fa-warning"></i> Esta ação não pode ser desfeita!
-                    </div>
+                    <p id="mensagem-confirmacao">Esta ação não pode ser desfeita!</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="btn-confirmar-exclusao">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-confirmar-exclusao">Excluir</button>
                 </div>
             </div>
         </div>
