@@ -110,6 +110,23 @@ body {
     color: #fff;
 }
 
+/* Botões de exclusão */
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
 /* Formulários */
 .form-control, .form-select {
     border-radius: 8px;
@@ -174,6 +191,21 @@ input[type="date"]:focus, input[type="time"]:focus {
     font-size: 0.9rem;
 }
 
+/* Botões de ação na tabela */
+.table .btn-group {
+    white-space: nowrap;
+}
+
+.table .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    margin-right: 0.25rem;
+}
+
+.table .btn-sm:last-child {
+    margin-right: 0;
+}
+
 /* Badges */
 .badge {
     border-radius: 20px;
@@ -219,6 +251,11 @@ input[type="date"]:focus, input[type="time"]:focus {
     color: #0c5460;
 }
 
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
 /* Modal */
 .modal-content {
     border-radius: 15px;
@@ -231,6 +268,10 @@ input[type="date"]:focus, input[type="time"]:focus {
     color: white;
     border-radius: 15px 15px 0 0;
     border: none;
+}
+
+.modal-header.bg-danger {
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
 }
 
 .modal-title {
@@ -264,6 +305,23 @@ input[type="date"]:focus, input[type="time"]:focus {
 
 .page {
     animation: fadeIn 0.5s ease;
+}
+
+/* Pulse animation for delete buttons */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn-danger:hover {
+    animation: pulse 0.6s ease-in-out;
 }
 
 /* Responsividade */
@@ -304,6 +362,11 @@ input[type="date"]:focus, input[type="time"]:focus {
     
     .row .col-md-6 {
         margin-bottom: 1rem;
+    }
+    
+    .table .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
     }
 }
 

@@ -110,8 +110,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h4><i class="fas fa-user"></i> Informações do Cliente</h4>
+                            <button class="btn btn-sm btn-danger" onclick="excluirCliente()" title="Excluir Cliente">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                         <div class="card-body" id="cliente-info">
                             <!-- Preenchido via JavaScript -->
@@ -255,6 +258,32 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" onclick="salvarInteracao()">
                         <i class="fas fa-save"></i> Salvar Interação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação de Exclusão -->
+    <div class="modal fade" id="modalConfirmacao" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="mensagem-confirmacao"></p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-warning"></i> Esta ação não pode ser desfeita!
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btn-confirmar-exclusao">
+                        <i class="fas fa-trash"></i> Excluir
                     </button>
                 </div>
             </div>

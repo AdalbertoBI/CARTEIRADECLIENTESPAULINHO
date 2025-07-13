@@ -113,9 +113,14 @@ function carregarClientes() {
             <td>${cliente.cidade}</td>
             <td>${new Date(cliente.dataCadastro).toLocaleDateString('pt-BR')}</td>
             <td>
-                <button class="btn btn-sm btn-info" onclick="verDetalhes(${cliente.id})">
-                    <i class="fas fa-eye"></i> Ver Detalhes
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-info" onclick="verDetalhes(${cliente.id})">
+                        <i class="fas fa-eye"></i> Detalhes
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="confirmarExclusaoCliente(${cliente.id}, '${cliente.nome}')">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
             </td>
         </tr>
     `).join('');
@@ -134,6 +139,69 @@ function verDetalhes(clienteId) {
     
     carregarInteracoes(clienteId);
     showPage('cliente-detalhes');
+}
+
+// Funções de Exclusão
+function confirmarExclusaoCliente(clienteId, nomeCliente) {
+    const modal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
+    const mensagem = document.getElementById('mensagem-confirmacao');
+    const btnConfirmar = document.getElementById('btn-confirmar-exclusao');
+    
+    mensagem.innerHTML = `
+        Tem certeza que deseja excluir o cliente <strong>${nomeCliente}</strong>?<br>
+        <small class="text-muted">Todas as interações deste cliente também serão excluídas.</small>
+    `;
+    
+    btnConfirmar.onclick = function() {
+        excluirClienteById(clienteId);
+        modal.hide();
+    };
+    
+    modal.show();
+}
+
+function excluirClienteById(clienteId) {
+    // Excluir cliente
+    clientes = clientes.filter(c => c.id !== clienteId);
+    localStorage.setItem('clientes', JSON.stringify(clientes));
+    
+    // Excluir todas as interações do cliente
+    interacoes = interacoes.filter(i => i.clienteId !== clienteId);
+    localStorage.setItem('interacoes', JSON.stringify(interacoes));
+    
+    showAlert('Cliente excluído com sucesso!', 'success');
+    carregarClientes();
+}
+
+function excluirCliente() {
+    if (clienteAtual) {
+        confirmarExclusaoCliente(clienteAtual.id, clienteAtual.nome);
+    }
+}
+
+function confirmarExclusaoInteracao(interacaoId) {
+    const modal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
+    const mensagem = document.getElementById('mensagem-confirmacao');
+    const btnConfirmar = document.getElementById('btn-confirmar-exclusao');
+    
+    mensagem.innerHTML = `
+        Tem certeza que deseja excluir esta interação?
+    `;
+    
+    btnConfirmar.onclick = function() {
+        excluirInteracaoById(interacaoId);
+        modal.hide();
+    };
+    
+    modal.show();
+}
+
+function excluirInteracaoById(interacaoId) {
+    interacoes = interacoes.filter(i => i.id !== interacaoId);
+    localStorage.setItem('interacoes', JSON.stringify(interacoes));
+    
+    showAlert('Interação excluída com sucesso!', 'success');
+    carregarInteracoes(clienteAtual.id);
 }
 
 // Função para definir data e hora atual
@@ -247,6 +315,7 @@ function carregarInteracoes(clienteId) {
                         <th>KM</th>
                         <th>Data</th>
                         <th>Horário</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -259,6 +328,11 @@ function carregarInteracoes(clienteId) {
                                 <td>${interacao.kmPercorrida > 0 ? interacao.kmPercorrida + ' km' : '-'}</td>
                                 <td>${dataInteracao.toLocaleDateString('pt-BR')}</td>
                                 <td>${dataInteracao.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger" onclick="confirmarExclusaoInteracao(${interacao.id})" title="Excluir Interação">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
                             </tr>
                         `;
                     }).join('')}
